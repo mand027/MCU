@@ -4,17 +4,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     var jAvenger:String? = null
+    private lateinit var mcuDudeAdapter : MCUDudeRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setRecyclerView() // adapter instanciado
+        mcuDudeAdapter.setData(getDataSet())
+    }
 
+    private fun setRecyclerView(){
+        recycler_view_mcu.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            mcuDudeAdapter = MCUDudeRecyclerAdapter()
+            adapter = mcuDudeAdapter
+        }
     }
 
     fun leerJSON():String?{
@@ -41,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             val jobject = jArray.getJSONObject(i)
             val name = jobject.getString("name/alias")
             val notes = jobject.getString("notes")
-            dudes.add(MCUDude(name, notes))
+            if(name!=null) dudes.add(MCUDude(name, notes))
 
         }
         return dudes

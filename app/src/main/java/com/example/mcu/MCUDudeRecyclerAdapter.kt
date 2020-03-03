@@ -21,11 +21,23 @@ class MCUDudeRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when(holder){
+            is MCUDudeViewHolder -> {
+                holder.bind(dudes.get(position))
+            }
+        }
+    }
+    fun setData(listDudes: List<MCUDude>){
+        dudes = listDudes
     }
 
     class MCUDudeViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
         val name = itemView.nombre
         val notes = itemView.notas
+
+        fun bind(mcuDude: MCUDude){
+            name.text = mcuDude.name
+            notes.text = mcuDude.heroNotes
+        }
     }
 }
