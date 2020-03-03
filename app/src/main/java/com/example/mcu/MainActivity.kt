@@ -2,12 +2,16 @@ package com.example.mcu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import java.lang.Exception
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.sql.Timestamp
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setRecyclerView() // adapter instanciado
-        mcuDudeAdapter.setData(getDataSet())
+
+        //mcuDudeAdapter.setData(getDataSet())
+        MCUMarvelVolley(getMarvelAPIUrl(), this, mcuDudeAdapter).callMarvelApi()
     }
 
     private fun setRecyclerView(){
@@ -57,5 +63,22 @@ class MainActivity : AppCompatActivity() {
 
         }
         return dudes
+    }
+
+    fun String.md5():String{
+        val md5Al = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md5Al.digest(toByteArray())).toString(16).padStart(32, '0')
+    }
+
+    fun getMarvelAPIUrl(): String{
+        val tString = Timestamp(System.currentTimeMillis()).toString()
+        val hString = tString + "7ea50c99510d0490d8d446668c324c12f29ffc81" + "0c5a5356991eb0cf559b226590462d43"
+        val hash = hString.md5()
+
+        var marvelAPI : String = "https://gateway.marvel.com:443/v1/public/characters?ts=" +
+                tString +
+                "&limit=100&apikey=7ea50c99510d0490d8d446668c324c12f29ffc81&hash="+hash
+        return marvelAPI
+
     }
 }

@@ -29,6 +29,7 @@ class MCUDudeRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
     fun setData(listDudes: List<MCUDude>){
         dudes = listDudes
+        notifyDataSetChanged()
     }
 
     class MCUDudeViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -36,8 +37,8 @@ class MCUDudeRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val notes = itemView.notas
 
         fun bind(mcuDude: MCUDude){
-            name.text = mcuDude.name
-            notes.text = mcuDude.heroNotes
+            name.text = mcuDude.alias
+            notes.text = mcuDude.notes
         }
     }
 }
